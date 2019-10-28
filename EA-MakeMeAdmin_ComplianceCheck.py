@@ -11,7 +11,6 @@ if os.path.exists(workingDir + statusFile):
         print '<result>' + status + '</result>'
     else:
         newAdm = plistlib.readPlist(workingDir + statusFile).newAdmins
-        orgAdm = plistlib.readPlist(workingDir + statusFile).orgAdmin
-        print '<result>' + status + ' - ' + newAdm + ' - ' + orgAdm + '</result>'
+        print '<result>' + status + ' - ' + newAdm + '</result>'
 else:
     print '<result>' + 'Compliant' + '</result>'
