@@ -75,11 +75,6 @@ tempAdminLog = 'tempAdmin.log'                      # script log file
 # FUNCTIONS
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-def DecryptString(inputString, salt, passphrase):
-    '''Usage: >>> DecryptString("Encrypted String", "Salt", "Passphrase")'''
-    p = subprocess.Popen(['/usr/bin/openssl', 'enc', '-aes256', '-d', '-a', '-A', '-S', salt, '-k', passphrase], stdin = subprocess.PIPE, stdout = subprocess.PIPE)
-    return p.communicate(inputString)[0]
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # APPLICATION
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
