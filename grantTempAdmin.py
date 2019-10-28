@@ -33,8 +33,7 @@
 # This script was modified from Andrina Kelly's version presented at JNUC2013 for allowing
 # a user to elevate their privelages to administrator once per day for 30 minutes. After 
 # the 30 minutes if a user created a new admin account that account will have admin rights
-# also revoked. If the user changed the organization admin account password, that will also
-# be reset.
+# also revoked.
 #
 # To accomplish this the following will be performed:
 #			- A launch daemon will be put in place in order to remove admin rights
@@ -46,7 +45,6 @@
 #			- Policy for enabling tempAdmin via Self Service
 #			- Policy to remove tempAdmin via custom trigger
 #			- tempAdmin.sh & removeTempAdmin.sh Scripts
-#           - orgAdmin encrypted password specified in Jamf Pro parameter #4
 #
 #
 # Written by: Joshua Roskos | Professional Services Engineer | Jamf
