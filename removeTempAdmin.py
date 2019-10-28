@@ -33,8 +33,7 @@
 # This script was modified from Andrina Kelly's version presented at JNUC2013 for allowing
 # a user to elevate their privelages to administrator once per day for 30 minutes. After 
 # the 30 minutes if a user created a new admin account that account will have admin rights
-# also revoked. If the user changed the organization admin account password, that will also
-# be reset.
+# also revoked.
 #
 # To accomplish this the following will be performed:
 #           - A launch daemon will be put in place in order to remove admin rights
@@ -46,7 +45,6 @@
 #           - Policy for enabling tempAdmin via Self Service
 #           - Policy to remove tempAdmin via custom trigger (adminremove)
 #           - tempAdmin.sh & removeTempAdmin.sh Scripts
-#           - orgAdmin encrypted password specified in Jamf Pro parameter #4
 #
 #
 # Written by: Joshua Roskos | Professional Services Engineer | Jamf
@@ -72,9 +70,6 @@ launchdFile = 'com.jamfps.adminremove.plist'        # launch daemon file locatio
 plistFile = 'MakeMeAdmin.plist'                     # working plist location
 statusFile = 'MakeMeAdmin.Status.plist'             # compliancy check plist location
 tempAdminLog = 'tempAdmin.log'                      # script log file
-orgAdmins = {'orgadmin': sys.argv[4]}               # replace orgAdmin with your organizational admin / password passed via Jamf Pro Parameter #4
-salt = '34599b64b8d44a7e'                           # decrypt salt 
-passphrase = 'c0495bebbed8ce26115d66a2'             # decrypt passphrase
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # FUNCTIONS
@@ -116,8 +111,7 @@ if os.path.exists(workingDir + plistFile):
         log.close()
         # update status plist
         status = { 'Status':'Remediated',
-                   'newAdmins':'newAdmin Created',
-                   'orgAdmin':'orgAdmin OK'}
+                   'newAdmins':'newAdmin Created'}
         plistlib.writePlist(status, workingDir + statusFile)
         newAdm = plistlib.readPlist(workingDir + statusFile).newAdmins
         # loop through new admin accounts and remove admin rights
@@ -129,60 +123,6 @@ if os.path.exists(workingDir + plistFile):
             log.close()
             print '      Removed Admin Rights for ' + user
             time.sleep(1)
-    # check if organization admin(s) are valid
-    print 'Checking organizational admin passwords...'
-    for admin, admpass in orgAdmins.iteritems():
-        # decrypt password
-        admpassDecrypted = DecryptString(admpass, salt, passphrase)
-        time.sleep(1)
-        valid = subprocess.call(["dscl", "/Local/Default", "-authonly", admin, admpassDecrypted])
-        time.sleep(1)
-        if valid == 0:
-            log = open(workingDir + tempAdminLog, "a+")
-            log.write("{} - orgAdmin Password is Valid \r\n".format(datetime.now()))
-            log.close()
-            print 'Password for orgAdmin: ' + admin + ' is valid!'
-        else:
-            log = open(workingDir + tempAdminLog, "a+")
-            log.write("{} - orgAdmin Password is Invalid! \r\n".format(datetime.now()))
-            log.close()
-            result = subprocess.call(["dscl", ".", "passwd", "/Users/" + admin, admpassDecrypted])
-            time.sleep(3)
-            print 'Password for orgAdmin: ' + admin + ' was invalid!'
-            if result == 0:
-                log = open(workingDir + tempAdminLog, "a+")
-                log.write("{} - orgAdmin Password Successfully Reset! \r\n".format(datetime.now()))
-                log.close()
-                print 'Password Successfully Reset for ' + admin + "!"
-                if not newAdm:
-                    # update status plist
-                    status = { 'Status':'Remediated',
-                               'newAdmins':'No newAdmins',
-                               'orgAdmin':'orgAdmin OK'}
-                    plistlib.writePlist(status, workingDir + statusFile)
-                else:
-                    # update status plist
-                    status = { 'Status':'Remediated',
-                               'newAdmins':'newAdmin Created',
-                               'orgAdmin':'orgAdmin OK'}
-                    plistlib.writePlist(status, workingDir + statusFile)
-            else:
-                log = open(workingDir + tempAdminLog, "a+")
-                log.write("{} - Error Resetting orgAdmin Password! \r\n".format(datetime.now()))
-                log.close()
-                print 'Error Resetting Password for ' + admin + "!"
-                if not newAdm:
-                    # update status plist
-                    status = { 'Status':'Violation',
-                               'newAdmins':'No newAdmins',
-                               'orgAdmin':'orgAdmin ERROR'}
-                    plistlib.writePlist(status, workingDir + statusFile)
-                else:
-                    # update status plist
-                    status = { 'Status':'Violation',
-                               'newAdmins':'newAdmin Created',
-                               'orgAdmin':'orgAdmin ERROR'}
-                    plistlib.writePlist(status, workingDir + statusFile)
     os.remove(workingDir + plistFile)
 
 if os.path.exists('/Library/LaunchDaemons/' + launchdFile):
