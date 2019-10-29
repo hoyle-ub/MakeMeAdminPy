@@ -104,11 +104,6 @@ if os.path.exists(workingDir + plistFile):
         log = open(workingDir + tempAdminLog, "a+")
         log.write("{} - MakeMeAdmin Discovered New Admin Accounts: {}\r\n".format(datetime.now(), list(newAdmins)))
         log.close()
-        # update status plist
-        status = { 'Status':'Remediated',
-                   'newAdmins':'newAdmin Created'}
-        plistlib.writePlist(status, workingDir + statusFile)
-        newAdm = plistlib.readPlist(workingDir + statusFile).newAdmins
         # loop through new admin accounts and remove admin rights
         print '   Removing Admin Rights for New Admin Accounts...'
         for user in newAdmins:
@@ -118,6 +113,11 @@ if os.path.exists(workingDir + plistFile):
             log.close()
             print '      Removed Admin Rights for ' + user
             time.sleep(1)
+        # update status plist
+        status = { 'Status':'Remediated',
+                   'newAdmins':'newAdmin Created'}
+        plistlib.writePlist(status, workingDir + statusFile)
+        newAdm = plistlib.readPlist(workingDir + statusFile).newAdmins
     os.remove(workingDir + plistFile)
 
 if os.path.exists('/Library/LaunchDaemons/' + launchdFile):
