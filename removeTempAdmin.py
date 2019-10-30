@@ -31,8 +31,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # 
 # This script was modified from Andrina Kelly's version presented at JNUC2013 for allowing
-# a user to elevate their privelages to administrator once per day for 30 minutes. After 
-# the 30 minutes if a user created a new admin account that account will have admin rights
+# a user to elevate their privelages to administrator once per day for 60 minutes. After 
+# the 60 minutes if a user created a new admin account that account will have admin rights
 # also revoked.
 #
 # To accomplish this the following will be performed:

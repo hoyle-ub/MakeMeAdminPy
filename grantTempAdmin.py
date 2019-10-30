@@ -31,8 +31,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # 
 # This script was modified from Andrina Kelly's version presented at JNUC2013 for allowing
-# a user to elevate their privelages to administrator once per day for 30 minutes. After 
-# the 30 minutes if a user created a new admin account that account will have admin rights
+# a user to elevate their privelages to administrator once per day for 60 minutes. After 
+# the 60 minutes if a user created a new admin account that account will have admin rights
 # also revoked.
 #
 # To accomplish this the following will be performed:
@@ -73,7 +73,7 @@ launchdFile = 'com.jamfps.adminremove.plist'                                # la
 launchdLabel = launchdFile.replace('.plist', '')                            # launch daemon label
 plistFile = 'MakeMeAdmin.plist'                                             # settings file name
 tempAdminLog = 'tempAdmin.log'                                              # script log file
-adminTimer = 1800                                                           # how long should they have admin rights for (in seconds)
+adminTimer = 3600                                                           # how long should they have admin rights for (in seconds)
 policyCustomTrigger = 'adminremove'                                         # custom trigger specified for removeTempAdmin.py policy
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 

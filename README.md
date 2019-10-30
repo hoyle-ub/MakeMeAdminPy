@@ -65,7 +65,7 @@ When you open the scripts you will find some user variables that will need to be
   * Self Service
     * *Configure to your requirements*
   * User Interaction
-    * Complete Message: *You have been granted admin rights for the next 30 minutes.*
+    * Complete Message: *You have been granted admin rights for the next 60 minutes.*
 * Policy: MakeMeAdmin - Remove Admin Rights
   * Payload - General
     * Display Name: *MakeMeAdmin - Remove Admin Rights*
